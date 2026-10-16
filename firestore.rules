@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Los datos viven en /familias/{codigoFamilia}/{ingresos|gastos|categorias|metas}/{id}
+    // Requiere sesión (la app usa Authentication → Anónimo). El código de familia
+    // actúa como secreto compartido: usa uno largo y difícil de adivinar.
+    match /familias/{familia}/{coleccion}/{doc} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
